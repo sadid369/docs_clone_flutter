@@ -1,6 +1,6 @@
-const e = require("express");
 const express = require("express");
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 const authRouter = express.Router();
 
@@ -17,7 +17,8 @@ authRouter.post("/api/signup", async (req, res) => {
       });
       user = await user.save();
     }
-    res.json({ user });
+    const token = jwt.sign({ id: user._id });
+    res.json({ user, token });
     //store data
   } catch (e) {
     res.status(500).json({ error: e.message });
