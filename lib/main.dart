@@ -36,7 +36,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     final user = ref.watch(userProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Docs Clone Flutter',
+      title: 'Docs Clone Flutters',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
