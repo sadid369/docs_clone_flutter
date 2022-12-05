@@ -11,6 +11,7 @@ class LoginScreen extends ConsumerWidget {
     final navigator = Navigator.of(context);
     final errorModel =
         await ref.read(authRepositoryProvider).signInWithGoogle();
+    print('here ${errorModel.data}');
     if (errorModel.error == null) {
       ref.read(userProvider.notifier).update((state) => errorModel.data);
       navigator.push(

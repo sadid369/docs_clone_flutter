@@ -1,4 +1,5 @@
 import 'package:docs_clone_flutter/models/error_model.dart';
+import 'package:docs_clone_flutter/models/user_model.dart';
 import 'package:docs_clone_flutter/repository/auth_repository.dart';
 import 'package:docs_clone_flutter/screens/home_screen.dart';
 import 'package:docs_clone_flutter/screens/login_screen.dart';
@@ -18,6 +19,7 @@ class MyApp extends ConsumerStatefulWidget {
 
 class _MyAppState extends ConsumerState<MyApp> {
   ErrorModel? errorModel;
+
   @override
   void initState() {
     super.initState();
@@ -25,15 +27,21 @@ class _MyAppState extends ConsumerState<MyApp> {
   }
 
   void getUserData() async {
+    print(errorModel);
     errorModel = await ref.read(authRepositoryProvider).getUserData();
+    print(errorModel!.data);
+    print(errorModel);
     if (errorModel != null && errorModel!.data != null) {
+      print("pass");
       ref.read(userProvider.notifier).update((state) => errorModel!.data);
+      print(userProvider.state);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
+    print(user);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Docs Clone Flutters',

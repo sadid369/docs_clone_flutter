@@ -37,9 +37,9 @@ class AuthRepository {
       final user = await _googleSignIn.signIn();
       if (user != null) {
         final userAcc = UserModel(
-            name: user.displayName!,
+            name: user.displayName ?? "",
             email: user.email,
-            profilePic: user.photoUrl!,
+            profilePic: user.photoUrl ?? "",
             uid: "",
             token: "");
         var res = await _client.post(Uri.parse('$host/api/signup'),
