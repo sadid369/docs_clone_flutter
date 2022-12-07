@@ -1,10 +1,12 @@
 import 'package:docs_clone_flutter/models/error_model.dart';
 import 'package:docs_clone_flutter/models/user_model.dart';
 import 'package:docs_clone_flutter/repository/auth_repository.dart';
+import 'package:docs_clone_flutter/router.dart';
 import 'package:docs_clone_flutter/screens/home_screen.dart';
 import 'package:docs_clone_flutter/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:routemaster/routemaster.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -27,28 +29,30 @@ class _MyAppState extends ConsumerState<MyApp> {
   }
 
   void getUserData() async {
-    print(errorModel);
     errorModel = await ref.read(authRepositoryProvider).getUserData();
-    print(errorModel!.data);
-    print(errorModel);
+
     if (errorModel != null && errorModel!.data != null) {
-      print("pass");
       ref.read(userProvider.notifier).update((state) => errorModel!.data);
-      print(userProvider.state);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider);
-    print(user);
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Docs Clone Flutters',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: user == null ? const LoginScreen() : const HomeScreen(),
+      routerDelegate: RoutemasterDelegate(routesBuilder: (context) {
+        final user = ref.watch(userProvider);
+        if (user != null && user.token.isNotEmpty) {
+          return loggedInRoute;
+        } else {
+          return loggedOutRoute;
+        }
+      }),
+      routeInformationParser: RoutemasterParser(),
     );
   }
 }
