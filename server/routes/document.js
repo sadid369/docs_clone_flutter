@@ -3,7 +3,7 @@ const Document = require("../models/document");
 const documentRouter = express.Router();
 const auth = require("../middlewares/auth");
 
-documentRouter.post("/doc/create", auth, async (req, res) => {
+documentRouter.post("/docs/create", auth, async (req, res) => {
   try {
     const { createdAt } = req.body;
     let document = new Document({
@@ -13,6 +13,14 @@ documentRouter.post("/doc/create", auth, async (req, res) => {
     });
     document = await document.save();
     res.status(200).json(document);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+documentRouter.get("/docs/me", auth, async (req, res) => {
+  try {
+    let document = await Document.find({ uid: req.user });
+    res.json(document);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
